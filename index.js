@@ -15,6 +15,9 @@ import { repairValidation } from './validations/repair.js'
 import { userValidation } from './validations/user.js'
 import { handleValidationErrors } from './utils/index.js'
 
+import swaggerUi from 'swagger-ui-express'
+import swaggerDocument from './swagger/swagger.json' assert { type: 'json' }
+
 const app = express()
 
 mongoose
@@ -26,6 +29,8 @@ mongoose
 
 app.use(express.json())
 app.use(cors())
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.get('/repair/all-prev', checkAuth, RepairController.getPrev)
 app.get('/repair/:id', checkAuth, RepairController.getById)

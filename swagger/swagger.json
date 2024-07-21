@@ -1,0 +1,695 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "API Documentation",
+		"version": "1.0.0",
+		"description": "API Description"
+	},
+	"servers": [
+		{
+			"url": "https://machine-master-backend.onrender.com/",
+			"description": "Render server"
+		}
+	],
+	"paths": {
+		"/repair-types": {
+			"get": {
+				"summary": "Get all repair types",
+				"tags": ["RepairType"],
+				"parameters": [
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "List of repair types",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"_id": {
+												"type": "string",
+												"example": "60c72b2f9b1d4c3a6c8b4567"
+											},
+											"name": {
+												"type": "string",
+												"example": "Engine Repair"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося отримати типи ремонтів"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/repair/all-prev": {
+			"get": {
+				"summary": "Get all previous repairs",
+				"tags": ["Repair"],
+				"parameters": [
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved all previous repairs",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"brand": {
+												"type": "string",
+												"example": "Toyota"
+											},
+											"repairName": {
+												"type": "string",
+												"example": "Engine Repair"
+											},
+											"repairId": {
+												"type": "string",
+												"example": "60c72b2f9b1d4c3a6c8b4567"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося отримати дані про ремонти"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/repair/{id}": {
+			"get": {
+				"summary": "Get repair details by ID",
+				"tags": ["Repair"],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved repair details",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"machineId": {
+											"type": "object",
+											"properties": {
+												"_id": {
+													"type": "string",
+													"example": "60c72b2f9b1d4c3a6c8b4567"
+												},
+												"country": {
+													"type": "string",
+													"example": "Japan"
+												},
+												"year": {
+													"type": "integer",
+													"example": 2010
+												},
+												"brand": {
+													"type": "string",
+													"example": "Toyota"
+												},
+												"repairCount": {
+													"type": "integer",
+													"example": 3
+												}
+											}
+										},
+										"repairId": {
+											"type": "object",
+											"properties": {
+												"name": {
+													"type": "string",
+													"example": "Engine Repair"
+												},
+												"duration": {
+													"type": "integer",
+													"example": 2
+												},
+												"cost": {
+													"type": "number",
+													"format": "float",
+													"example": 150.0
+												},
+												"notes": {
+													"type": "string",
+													"example": "Includes parts and labor"
+												}
+											}
+										},
+										"startDate": {
+											"type": "string",
+											"format": "date-time",
+											"example": "2023-07-19T14:48:00.000Z"
+										},
+										"notes": {
+											"type": "string",
+											"example": "Replaced engine oil and filter"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Repair not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Ремонт не знайдено"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося отримати дані про ремонт"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"summary": "Delete a repair by ID",
+				"tags": ["Repair"],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"name": "id",
+						"in": "path",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Repair successfully deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Ремонт успішно видалено"
+										},
+										"deletedRepair": {
+											"type": "object",
+											"properties": {
+												"_id": {
+													"type": "string",
+													"example": "60c72b2f9b1d4c3a6c8b4567"
+												},
+												"machineId": {
+													"type": "string",
+													"example": "60c72b2f9b1d4c3a6c8b1234"
+												},
+												"repairTypeId": {
+													"type": "string",
+													"example": "60c72b2f9b1d4c3a6c8b5678"
+												},
+												"startDate": {
+													"type": "string",
+													"format": "date-time",
+													"example": "2023-07-19T14:48:00.000Z"
+												},
+												"notes": {
+													"type": "string",
+													"example": "Replaced engine oil and filter"
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Repair not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Ремонт не знайдено"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося видалити ремонт"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/machine": {
+			"post": {
+				"summary": "Create a new machine and repair",
+				"tags": ["Machine"],
+				"parameters": [
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"country": {
+										"type": "string",
+										"example": "USA"
+									},
+									"year": {
+										"type": "integer",
+										"example": 2020
+									},
+									"brand": {
+										"type": "string",
+										"example": "Ford"
+									},
+									"repairTypeId": {
+										"type": "string",
+										"example": "607d2b2f4d0a1c1b8c1c2d3e"
+									},
+									"startDate": {
+										"type": "string",
+										"format": "date-time",
+										"example": "2024-01-01T00:00:00Z"
+									},
+									"notes": {
+										"type": "string",
+										"example": "Regular maintenance"
+									}
+								},
+								"required": [
+									"country",
+									"year",
+									"brand",
+									"repairTypeId",
+									"startDate"
+								]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Machine and repair created successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"brand": {
+											"type": "string",
+											"example": "Ford"
+										},
+										"repairName": {
+											"type": "string",
+											"example": "Engine Repair"
+										},
+										"repairId": {
+											"type": "string",
+											"example": "60c72b2f9b1d4c3a6c8b4567"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося додати верстат і ремонт"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/machine/all": {
+			"get": {
+				"summary": "Get all machines",
+				"tags": ["Machine"],
+				"parameters": [
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"properties": {
+											"country": {
+												"type": "string",
+												"example": "USA"
+											},
+											"year": {
+												"type": "integer",
+												"example": 2020
+											},
+											"brand": {
+												"type": "string",
+												"example": "Ford"
+											},
+											"repairCounts": {
+												"type": "integer",
+												"example": 5
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося отримати дані про ремонти"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"summary": "Authenticate a user",
+				"tags": ["Auth"],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"email": {
+										"type": "string",
+										"example": "user@example.com"
+									},
+									"password": {
+										"type": "string",
+										"example": "password123"
+									}
+								},
+								"required": ["email", "password"]
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "User successfully authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"token": {
+											"type": "string",
+											"example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+										}
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Bad Request",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Помилка авторизації! Будь ласка, перевірте правильність пошти або пароля"
+										}
+									}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Помилка авторизації! Будь ласка, перевірте правильність пошти або пароля"
+										}
+									}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Не вдалося авторизуватися"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/isLogin": {
+			"get": {
+				"summary": "Check if the user is logged in",
+				"tags": ["Auth"],
+				"parameters": [
+					{
+						"name": "authorization",
+						"in": "header",
+						"type": "string",
+						"required": true,
+						"description": "JWT token"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "User is logged in",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean",
+									"example": true
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"example": "Access denied"
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"securitySchemes": {
+			"BearerAuth": {
+				"type": "http",
+				"scheme": "bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	}
+}
